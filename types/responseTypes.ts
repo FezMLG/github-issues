@@ -26,20 +26,19 @@ export interface IRepositoryListResult {
         name: string | null;
       }
     ];
-    issuesCount: number;
   };
   databaseId: number;
 }
 
 export interface IUserDetails {
   avatarLink: string;
-  name: string;
+  name: string | null;
   nickName: string;
   details: {
     followers: number;
     following: number;
+    stars: number;
   };
-  databaseId: number;
 }
 
 export type SearchResult = IUserListResult | IRepositoryListResult;

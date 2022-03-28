@@ -7,7 +7,7 @@ import {
 } from "../../types";
 import { IGithubRepResponse, SearchNode } from "../../types/GithubRepResponse";
 import { DataType } from "../../types/DataType.enum";
-import { IGithubUserResponse } from "../../types/GithubUserResponse";
+import { IGithubUsersResponse } from "../../types/GithubUsersResponse";
 import { loadRepositories, loadUsers } from "./apolloClient";
 
 export default async function handler(
@@ -17,7 +17,7 @@ export default async function handler(
   const body: SearchRequest = req.body;
 
   const repData: IGithubRepResponse = await loadRepositories(body);
-  const userData: IGithubUserResponse = await loadUsers(body);
+  const userData: IGithubUsersResponse = await loadUsers(body);
   const repositoryAndUserArray: any[] = [];
 
   userData.search.nodes.forEach((element: any) => {
@@ -50,7 +50,6 @@ export default async function handler(
             name: element.languages.nodes[0]?.name || null,
           },
         ],
-        issuesCount: element.issues.totalCount,
       },
       databaseId: element.databaseId,
     };
