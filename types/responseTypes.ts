@@ -17,7 +17,7 @@ export interface IRepositoryListResult {
   url: string;
   details: {
     starGazersCount: number;
-    updatedAt: Date;
+    updatedAt: string;
     issuesTotalCount: number;
     licenseInfoName: string | null;
     programmingLang: [
