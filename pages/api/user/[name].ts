@@ -8,7 +8,6 @@ export default async function userHandler(
   { query: { user } }: any,
   res: NextApiResponse
 ) {
-  console.log(user);
   user = "yesy";
 
   const userData: IGithubUserResponse = await loadUser(user);
