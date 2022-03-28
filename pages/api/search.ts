@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   IRepositoryListResult,
@@ -16,7 +15,33 @@ export default async function handler(
 ) {
   const body: SearchRequest = req.body;
 
-  const repData: IGithubRepResponse = await loadRepositories(body);
+  try {
+    const repData: IGithubRepResponse = await loadRepositories(body);
+    repData.search.nodes.forEach((element: SearchNode) => {
+      const tempObj: IRepositoryListResult = {
+        dataType: DataType.REPOSITORY,
+        nameWithOwner: element.nameWithOwner,
+        description: element?.description || null,
+        url: element.url,
+        details: {
+          starGazersCount: element.stargazers.totalCount,
+          updatedAt: element.updatedAt,
+          issuesTotalCount: element.issues.totalCount,
+          licenseInfoName: element.licenseInfo?.name || null,
+          programmingLang: [
+            {
+              color: element.languages.nodes[0]?.color || null,
+              name: element.languages.nodes[0]?.name || null,
+            },
+          ],
+        },
+        databaseId: element.databaseId,
+      };
+      repositoryAndUserArray.push(tempObj);
+    });
+  } catch (err) {
+    res.status(500).send({ error: err });
+  }
   const userData: IGithubUsersResponse = await loadUsers(body);
   const repositoryAndUserArray: any[] = [];
 
@@ -28,29 +53,6 @@ export default async function handler(
       nickName: element.login,
       bio: element?.bio || null,
       location: element?.location || null,
-      databaseId: element.databaseId,
-    };
-    repositoryAndUserArray.push(tempObj);
-  });
-
-  repData.search.nodes.forEach((element: SearchNode) => {
-    const tempObj: IRepositoryListResult = {
-      dataType: DataType.REPOSITORY,
-      nameWithOwner: element.nameWithOwner,
-      description: element?.description || null,
-      url: element.url,
-      details: {
-        starGazersCount: element.stargazers.totalCount,
-        updatedAt: element.updatedAt,
-        issuesTotalCount: element.issues.totalCount,
-        licenseInfoName: element.licenseInfo?.name || null,
-        programmingLang: [
-          {
-            color: element.languages.nodes[0]?.color || null,
-            name: element.languages.nodes[0]?.name || null,
-          },
-        ],
-      },
       databaseId: element.databaseId,
     };
     repositoryAndUserArray.push(tempObj);

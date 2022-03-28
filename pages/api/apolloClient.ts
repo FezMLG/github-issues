@@ -8,9 +8,7 @@ import { LOAD_USER } from "./GraphQL/searchUser";
 import { LOAD_USERS } from "./GraphQL/searchUsers";
 
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
   const token = process.env.GITHUB_TOKEN;
-  // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
@@ -39,7 +37,6 @@ export const loadRepositories = async (body: SearchRequest) => {
     query: LOAD_REPOSITORIES,
     variables,
   });
-
   return data;
 };
 
