@@ -1,7 +1,7 @@
 import { DataType } from "./DataType.enum";
 
 export interface IUserListResult {
-  dataType: DataType;
+  dataType: "USER";
   avatar: string;
   name: string | null;
   nickName: string;
@@ -11,13 +11,13 @@ export interface IUserListResult {
 }
 
 export interface IRepositoryListResult {
-  dataType: DataType;
+  dataType: "REPOSITORY";
   nameWithOwner: string;
   description: string | null;
   url: string;
   details: {
     starGazersCount: number;
-    updatedAt: Date;
+    updatedAt: string;
     issuesTotalCount: number;
     licenseInfoName: string | null;
     programmingLang: [
@@ -26,7 +26,6 @@ export interface IRepositoryListResult {
         name: string | null;
       }
     ];
-    issuesCount: number;
   };
   databaseId: number;
 }

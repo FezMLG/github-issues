@@ -16,6 +16,12 @@ let theme = createTheme({
 theme = createTheme(theme, {
   typography: {
     fontSize: 16,
+    h2: {
+      fontWeight: 700,
+      fontSize: "1rem",
+      lineHeight: "1.5",
+      color: theme.palette.primary.main,
+    },
   },
   components: {
     MuiAppBar: {

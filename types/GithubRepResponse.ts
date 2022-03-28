@@ -14,7 +14,7 @@ export interface SearchNode {
   description: string;
   stargazers: Issues;
   url: string;
-  updatedAt: Date;
+  updatedAt: string;
   licenseInfo: LicenseInfo;
   issues: Issues;
   databaseId: number;
