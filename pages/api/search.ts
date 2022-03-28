@@ -4,10 +4,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { LOAD_REPOSITORIES } from "./GraphQL/searchRepository";
 import { IRepositoryListResult, SearchRequest } from "../../types";
-
-type Data = {
-  name: string;
-};
+import { IGithubRepResponse, SearchNode } from "../../types/GithubResponses";
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -34,7 +31,7 @@ const loadRepositories = async (body: SearchRequest) => {
   const variablesRep = {
     query: body.inputString,
     type: "REPOSITORY",
-    numOfResults: 10,
+    numOfResults: 2,
   };
 
   const { data } = await client.query({
@@ -45,40 +42,16 @@ const loadRepositories = async (body: SearchRequest) => {
   return data;
 };
 
-interface IGithubRepResponse {
-  nameWithOwner: string;
-  description: string;
-  stargazers: Issues;
-  url: string;
-  updatedAt: Date;
-  licenseInfo: string | null;
-  databaseId: number;
-  languages: Languages;
-  issues: Issues;
-}
-
-export interface Issues {
-  totalCount: number;
-}
-
-export interface Languages {
-  nodes: Node[];
-}
-
-export interface Node {
-  name: string;
-  color: string;
-}
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<any>
 ) {
   const body: SearchRequest = req.body;
 
-  const repData = await loadRepositories(body);
+  const repData: IGithubRepResponse = await loadRepositories(body);
+  const repositoryAndUserArray: any[] = [];
 
-  repData.data.search.nodes.forEach((element: IGithubRepResponse) => {
+  repData.search.nodes.forEach((element: SearchNode) => {
     const tempObj: IRepositoryListResult = {
       nameWithOwner: element.nameWithOwner,
       description: element.description,
@@ -87,13 +60,19 @@ export default async function handler(
         starGazersCount: element.stargazers.totalCount,
         updatedAt: element.updatedAt,
         issuesTotalCount: element.issues.totalCount,
-        licenseInfoName: element.licenseInfo,
+        licenseInfoName: element.licenseInfo.name,
+        programmingLang: [
+          {
+            color: element.languages.nodes[0].color,
+            name: element.languages.nodes[0].name,
+          },
+        ],
+        issuesCount: element.issues.totalCount,
       },
       databaseId: 0,
     };
+    repositoryAndUserArray.push(tempObj);
   });
 
-  const repositoryArray: IRepositoryListResult[] = [];
-
-  res.status(200).json(repData);
+  res.status(200).json(repositoryAndUserArray);
 }
