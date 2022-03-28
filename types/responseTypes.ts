@@ -16,6 +16,7 @@ export interface IRepositoryListResult {
     issuesTotalCount: number;
     licenseInfoName: string;
   };
+  databaseId: number;
 }
 
 export interface IUserDetails {
@@ -26,6 +27,7 @@ export interface IUserDetails {
     followers: number;
     following: number;
   };
+  databaseId: number;
 }
 
 export type SearchResult = IUserListResult | IRepositoryListResult;
