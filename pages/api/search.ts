@@ -8,6 +8,7 @@ import {
 import { IGithubRepResponse, SearchNode } from "../../types/GithubRepResponse";
 import { DataType } from "../../types/DataType.enum";
 import { IGithubUserResponse } from "../../types/GithubUserResponse";
+import { loadRepositories, loadUsers } from "./apolloClient";
 
 export default async function handler(
   req: NextApiRequest,
