@@ -8,14 +8,22 @@ export interface IUserListResult {
 
 export interface IRepositoryListResult {
   nameWithOwner: string;
-  description: string;
+  description: string | null;
   url: string;
   details: {
     starGazersCount: number;
     updatedAt: Date;
     issuesTotalCount: number;
-    licenseInfoName: string;
+    licenseInfoName: string | null;
+    programmingLang: [
+      {
+        color: string;
+        name: string;
+      }
+    ];
+    issuesCount: number;
   };
+  databaseId: number;
 }
 
 export interface IUserDetails {
@@ -26,6 +34,7 @@ export interface IUserDetails {
     followers: number;
     following: number;
   };
+  databaseId: number;
 }
 
 export type SearchResult = IUserListResult | IRepositoryListResult;
