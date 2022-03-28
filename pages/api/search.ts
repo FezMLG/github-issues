@@ -14,6 +14,7 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   const body: SearchRequest = req.body;
+  const repositoryAndUserArray: any[] = [];
 
   try {
     const repData: IGithubRepResponse = await loadRepositories(body);
@@ -40,23 +41,27 @@ export default async function handler(
       repositoryAndUserArray.push(tempObj);
     });
   } catch (err) {
-    res.status(500).send({ error: err });
+    res.status(500).send({ message: "Problem with fetching repositories" });
   }
-  const userData: IGithubUsersResponse = await loadUsers(body);
-  const repositoryAndUserArray: any[] = [];
 
-  userData.search.nodes.forEach((element: any) => {
-    const tempObj: IUserListResult = {
-      dataType: DataType.USER,
-      avatar: element.avatarUrl,
-      name: element?.name || null,
-      nickName: element.login,
-      bio: element?.bio || null,
-      location: element?.location || null,
-      databaseId: element.databaseId,
-    };
-    repositoryAndUserArray.push(tempObj);
-  });
+  try {
+    const userData: IGithubUsersResponse = await loadUsers(body);
+
+    userData.search.nodes.forEach((element: any) => {
+      const tempObj: IUserListResult = {
+        dataType: DataType.USER,
+        avatar: element.avatarUrl,
+        name: element?.name || null,
+        nickName: element.login,
+        bio: element?.bio || null,
+        location: element?.location || null,
+        databaseId: element.databaseId,
+      };
+      repositoryAndUserArray.push(tempObj);
+    });
+  } catch (err) {
+    res.status(500).send({ message: "Problem with fetching users" });
+  }
 
   repositoryAndUserArray.sort(function (a, b) {
     return a.databaseId - b.databaseId;

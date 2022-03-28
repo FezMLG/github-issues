@@ -1,6 +1,6 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { ParsedUrlQuery } from "querystring";
+import { envConfig } from "../../envConfig";
 import { SearchRequest } from "../../types";
 import { DataType } from "../../types/DataType.enum";
 import { LOAD_REPOSITORIES } from "./GraphQL/searchRepository";
@@ -8,7 +8,7 @@ import { LOAD_USER } from "./GraphQL/searchUser";
 import { LOAD_USERS } from "./GraphQL/searchUsers";
 
 const authLink = setContext((_, { headers }) => {
-  const token = process.env.GITHUB_TOKEN;
+  const token = envConfig.githubKey;
   return {
     headers: {
       ...headers,
@@ -33,10 +33,15 @@ export const loadRepositories = async (body: SearchRequest) => {
     numOfResults: 10,
   };
 
-  const { data } = await client.query({
+  const { data, error } = await client.query({
     query: LOAD_REPOSITORIES,
     variables,
   });
+
+  if (error) {
+    console.error(error);
+  }
+
   return data;
 };
 
@@ -47,10 +52,14 @@ export const loadUsers = async (body: SearchRequest) => {
     numOfResults: 10,
   };
 
-  const { data } = await client.query({
+  const { data, error } = await client.query({
     query: LOAD_USERS,
     variables,
   });
+
+  if (error) {
+    console.error(error);
+  }
 
   return data;
 };
@@ -62,10 +71,14 @@ export const loadUser = async (body: any) => {
     numOfResults: 1,
   };
 
-  const { data } = await client.query({
+  const { data, error } = await client.query({
     query: LOAD_USER,
     variables,
   });
+
+  if (error) {
+    console.error(error);
+  }
 
   return data;
 };
