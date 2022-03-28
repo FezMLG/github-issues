@@ -3,10 +3,10 @@ import { DataType } from "./DataType.enum";
 export interface IUserListResult {
   dataType: DataType;
   avatar: string;
-  name: string;
+  name: string | null;
   nickName: string;
-  bio: string;
-  location: string;
+  bio: string | null;
+  location: string | null;
 }
 
 export interface IRepositoryListResult {
@@ -21,8 +21,8 @@ export interface IRepositoryListResult {
     licenseInfoName: string | null;
     programmingLang: [
       {
-        color: string;
-        name: string;
+        color: string | null;
+        name: string | null;
       }
     ];
     issuesCount: number;
