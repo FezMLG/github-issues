@@ -1,4 +1,7 @@
+import { DataType } from "./DataType.enum";
+
 export interface IUserListResult {
+  dataType: DataType;
   avatar: string;
   name: string;
   nickName: string;
@@ -7,6 +10,7 @@ export interface IUserListResult {
 }
 
 export interface IRepositoryListResult {
+  dataType: DataType;
   nameWithOwner: string;
   description: string | null;
   url: string;
