@@ -22,6 +22,9 @@ export const PageHeader = () => {
           size="small"
           variant="outlined"
           sx={{
+            input: {
+              color: "white",
+            },
             "& fieldset.MuiOutlinedInput-notchedOutline": {
               borderColor: "rgba(255, 255, 255, 0.5)",
               color: "white",
