@@ -1,8 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import { LOAD_REPOSITORIES } from "./GraphQL/searchRepository";
 import {
   IRepositoryListResult,
   IUserListResult,
@@ -10,63 +7,7 @@ import {
 } from "../../types";
 import { IGithubRepResponse, SearchNode } from "../../types/GithubRepResponse";
 import { DataType } from "../../types/DataType.enum";
-import { LOAD_USERS } from "./GraphQL/searchUsers";
-import {
-  IGithubUserResponse,
-  Search,
-  SearchUserNode,
-} from "../../types/GithubUserResponse";
-
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = process.env.GITHUB_TOKEN;
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    },
-  };
-});
-
-const httpLink = createHttpLink({
-  uri: "https://api.github.com/graphql",
-});
-
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-});
-
-const loadRepositories = async (body: SearchRequest) => {
-  const variables = {
-    query: body.inputString,
-    type: DataType.REPOSITORY,
-    numOfResults: 10,
-  };
-
-  const { data } = await client.query({
-    query: LOAD_REPOSITORIES,
-    variables,
-  });
-
-  return data;
-};
-
-const loadUsers = async (body: SearchRequest) => {
-  const variables = {
-    query: body.inputString,
-    type: DataType.USER,
-    numOfResults: 10,
-  };
-
-  const { data } = await client.query({
-    query: LOAD_USERS,
-    variables,
-  });
-
-  return data;
-};
+import { IGithubUserResponse } from "../../types/GithubUserResponse";
 
 export default async function handler(
   req: NextApiRequest,
@@ -120,4 +61,15 @@ export default async function handler(
   });
 
   res.status(200).json(repositoryAndUserArray);
+}
+function loadRepositories(
+  body: SearchRequest
+): IGithubRepResponse | PromiseLike<IGithubRepResponse> {
+  throw new Error("Function not implemented.");
+}
+
+function loadUsers(
+  body: SearchRequest
+): IGithubUserResponse | PromiseLike<IGithubUserResponse> {
+  throw new Error("Function not implemented.");
 }
