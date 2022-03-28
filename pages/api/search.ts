@@ -62,14 +62,3 @@ export default async function handler(
 
   res.status(200).json(repositoryAndUserArray);
 }
-function loadRepositories(
-  body: SearchRequest
-): IGithubRepResponse | PromiseLike<IGithubRepResponse> {
-  throw new Error("Function not implemented.");
-}
-
-function loadUsers(
-  body: SearchRequest
-): IGithubUserResponse | PromiseLike<IGithubUserResponse> {
-  throw new Error("Function not implemented.");
-}
