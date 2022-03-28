@@ -7,6 +7,7 @@ export interface IUserListResult {
   nickName: string;
   bio: string | null;
   location: string | null;
+  databaseId: number;
 }
 
 export interface IRepositoryListResult {

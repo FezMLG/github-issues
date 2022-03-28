@@ -14,6 +14,7 @@ export const LOAD_USERS = gql`
           bio
           location
           avatarUrl(size: 40)
+          databaseId
         }
       }
     }

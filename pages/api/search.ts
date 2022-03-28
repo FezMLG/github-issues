@@ -42,7 +42,7 @@ const loadRepositories = async (body: SearchRequest) => {
   const variables = {
     query: body.inputString,
     type: DataType.REPOSITORY,
-    numOfResults: 2,
+    numOfResults: 10,
   };
 
   const { data } = await client.query({
@@ -57,7 +57,7 @@ const loadUsers = async (body: SearchRequest) => {
   const variables = {
     query: body.inputString,
     type: DataType.USER,
-    numOfResults: 2,
+    numOfResults: 10,
   };
 
   const { data } = await client.query({
@@ -82,10 +82,11 @@ export default async function handler(
     const tempObj: IUserListResult = {
       dataType: DataType.USER,
       avatar: element.avatarUrl,
-      name: element.name,
+      name: element?.name || null,
       nickName: element.login,
-      bio: element.bio,
-      location: element.location,
+      bio: element?.bio || null,
+      location: element?.location || null,
+      databaseId: element.databaseId,
     };
     repositoryAndUserArray.push(tempObj);
   });
@@ -94,13 +95,13 @@ export default async function handler(
     const tempObj: IRepositoryListResult = {
       dataType: DataType.REPOSITORY,
       nameWithOwner: element.nameWithOwner,
-      description: element.description,
+      description: element?.description || null,
       url: element.url,
       details: {
         starGazersCount: element.stargazers.totalCount,
         updatedAt: element.updatedAt,
         issuesTotalCount: element.issues.totalCount,
-        licenseInfoName: element.licenseInfo.name,
+        licenseInfoName: element.licenseInfo?.name || null,
         programmingLang: [
           {
             color: element.languages.nodes[0]?.color || null,
@@ -109,9 +110,13 @@ export default async function handler(
         ],
         issuesCount: element.issues.totalCount,
       },
-      databaseId: 0,
+      databaseId: element.databaseId,
     };
     repositoryAndUserArray.push(tempObj);
+  });
+
+  repositoryAndUserArray.sort(function (a, b) {
+    return a.databaseId - b.databaseId;
   });
 
   res.status(200).json(repositoryAndUserArray);
