@@ -23,6 +23,12 @@ export const LOAD_REPOSITORIES = gql`
             totalCount
           }
           databaseId
+          languages(first: 1) {
+            nodes {
+              name
+              color
+            }
+          }
         }
       }
     }
