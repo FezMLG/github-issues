@@ -1,8 +1,10 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { ParsedUrlQuery } from "querystring";
 import { SearchRequest } from "../../types";
 import { DataType } from "../../types/DataType.enum";
 import { LOAD_REPOSITORIES } from "./GraphQL/searchRepository";
+import { LOAD_USER } from "./GraphQL/searchUser";
 import { LOAD_USERS } from "./GraphQL/searchUsers";
 
 const authLink = setContext((_, { headers }) => {
@@ -50,6 +52,21 @@ export const loadUsers = async (body: SearchRequest) => {
 
   const { data } = await client.query({
     query: LOAD_USERS,
+    variables,
+  });
+
+  return data;
+};
+
+export const loadUser = async (body: any) => {
+  const variables = {
+    query: body.user,
+    type: DataType.USER,
+    numOfResults: 1,
+  };
+
+  const { data } = await client.query({
+    query: LOAD_USER,
     variables,
   });
 

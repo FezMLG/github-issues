@@ -1,24 +1,26 @@
 export interface IGithubUserResponse {
-  search: Search;
+  search: SearchUser;
 }
 
-export interface Search {
-  __typename: string;
+export interface SearchUser {
   pageInfo: PageInfo;
   nodes: Node[];
 }
 
-export interface SearchUserNode {
-  __typename: string;
-  name: string;
+export interface UserNode {
+  name: null;
   login: string;
-  bio: string;
-  location: null | string;
   avatarUrl: string;
+  followers: Followers;
+  following: Followers;
+  starredRepositories: Followers;
+}
+
+export interface Followers {
+  totalCount: number;
 }
 
 export interface PageInfo {
-  __typename: string;
-  hasNextPage: boolean;
   endCursor: string;
+  startCursor: string;
 }
