@@ -1,13 +1,16 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import { envConfig } from "../../envConfig";
-import { SearchRequest, UserDetailsRequest } from "../../types";
-import { DataType } from "../../types/DataType.enum";
-import { LOAD_REPOSITORIES } from "./GraphQL/searchRepository";
-import { LOAD_USER } from "./GraphQL/searchUser";
-import { LOAD_USERS } from "./GraphQL/searchUsers";
+import {ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client";
+import {setContext} from "@apollo/client/link/context";
+import {envConfig} from "../../envConfig";
+import {SearchRequest, UserDetailsRequest} from "../../types";
+import {DataType} from "../../types/DataType.enum";
+import {LOAD_REPOSITORIES} from "./GraphQL/searchRepository";
+import {LOAD_USER} from "./GraphQL/searchUser";
+import {LOAD_USERS} from "./GraphQL/searchUsers";
+import {IGithubRepResponse} from "../../types/GithubRepResponse";
+import {IGithubUsersResponse} from "../../types/GithubUsersResponse";
+import {IGithubUserResponse} from "../../types/GithubUserResponse";
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext((_, {headers}) => {
   const token = envConfig.githubKey;
   return {
     headers: {
@@ -26,14 +29,14 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export const loadRepositories = async (body: SearchRequest) => {
+export const loadRepositories = async (body: SearchRequest): Promise<IGithubRepResponse> => {
   const variables = {
     query: body.inputString,
     type: DataType.REPOSITORY,
     numOfResults: 10,
   };
 
-  const { data, error } = await client.query({
+  const {data, error} = await client.query({
     query: LOAD_REPOSITORIES,
     variables,
   });
@@ -45,14 +48,14 @@ export const loadRepositories = async (body: SearchRequest) => {
   return data;
 };
 
-export const loadUsers = async (body: SearchRequest) => {
+export const loadUsers = async (body: SearchRequest): Promise<IGithubUsersResponse> => {
   const variables = {
     query: body.inputString,
     type: DataType.USER,
     numOfResults: 10,
   };
 
-  const { data, error } = await client.query({
+  const {data, error} = await client.query({
     query: LOAD_USERS,
     variables,
   });
@@ -64,14 +67,14 @@ export const loadUsers = async (body: SearchRequest) => {
   return data;
 };
 
-export const loadUser = async (body: UserDetailsRequest) => {
+export const loadUser = async (body: UserDetailsRequest): Promise<IGithubUserResponse> => {
   const variables = {
     query: body.userNickname,
     type: DataType.USER,
     numOfResults: 1,
   };
 
-  const { data, error } = await client.query({
+  const {data, error} = await client.query({
     query: LOAD_USER,
     variables,
   });
