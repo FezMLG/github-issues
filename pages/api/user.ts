@@ -15,7 +15,7 @@ export default async function handler(
   if (error) {
     res.status(400).send({
       errorCode: 400,
-      errorMessage: String(error),
+      errorMessage: error.message,
     });
   }
 
