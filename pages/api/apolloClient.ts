@@ -10,6 +10,26 @@ import { IGithubRepResponse } from "../../types/GithubRepResponse";
 import { IGithubUsersResponse } from "../../types/GithubUsersResponse";
 import { IGithubUserResponse } from "../../types/GithubUserResponse";
 
+enum Importance {
+  High = -1,
+  Low = 1,
+}
+
+const calcNumOfResults = (numOfResults: number, importance: Importance) => {
+  if (numOfResults % 2 != 0) {
+    numOfResults = (numOfResults - importance) / 2;
+  }
+  return numOfResults;
+}
+
+const generateVariables = (query: string, type: DataType, numOfResults: number) => {
+  return {
+    query: query,
+    type: type,
+    numOfResults: numOfResults,
+  };
+}
+
 const authLink = setContext((_, { headers }) => {
   const token = envConfig.githubKey;
   return {
@@ -30,12 +50,9 @@ const client = new ApolloClient({
 });
 
 export const loadRepositories = async (body: SearchRequest): Promise<IGithubRepResponse> => {
-  const variables = {
-    query: body.inputString,
-    type: DataType.REPOSITORY,
-    numOfResults: Number(body.perPage) / 2,
-  };
-  
+  let numOfResults = calcNumOfResults(Number(body.perPage), Importance.High);
+  const variables = generateVariables(body.inputString, DataType.REPOSITORY, numOfResults)
+
   const { data, error } = await client.query({
     query: LOAD_REPOSITORIES,
     variables,
@@ -49,11 +66,8 @@ export const loadRepositories = async (body: SearchRequest): Promise<IGithubRepR
 };
 
 export const loadUsers = async (body: SearchRequest): Promise<IGithubUsersResponse> => {
-  const variables = {
-    query: body.inputString,
-    type: DataType.USER,
-    numOfResults: Number(body.perPage) / 2,
-  };
+  let numOfResults = calcNumOfResults(Number(body.perPage), Importance.Low);
+  const variables = generateVariables(body.inputString, DataType.USER, numOfResults)
 
   const { data, error } = await client.query({
     query: LOAD_USERS,
