@@ -1,8 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
+  ErrorResponse,
   IRepositoryListResult,
   IUserListResult,
   SearchRequest,
+  SearchResponse,
+  SearchResult,
 } from "../../types";
 import { IGithubRepResponse, SearchNode } from "../../types/GithubRepResponse";
 import { DataType } from "../../types/DataType.enum";
@@ -11,10 +14,10 @@ import { loadRepositories, loadUsers } from "./apolloClient";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<any>
+  res: NextApiResponse<SearchResult[] | ErrorResponse>
 ) {
   const body: SearchRequest = req.body;
-  const repositoryAndUserArray: any[] = [];
+  const repositoryAndUserArray: SearchResult[] = [];
 
   try {
     const repData: IGithubRepResponse = await loadRepositories(body);
@@ -41,7 +44,10 @@ export default async function handler(
       repositoryAndUserArray.push(tempObj);
     });
   } catch (err) {
-    res.status(500).send({ message: "Problem with fetching repositories" });
+    res.status(500).send({
+      errorCode: 500,
+      errorMessage: "Problem with fetching repositories",
+    });
   }
 
   try {
@@ -60,7 +66,10 @@ export default async function handler(
       repositoryAndUserArray.push(tempObj);
     });
   } catch (err) {
-    res.status(500).send({ message: "Problem with fetching users" });
+    res.status(500).send({
+      errorCode: 500,
+      errorMessage: "Problem with fetching users",
+    });
   }
 
   repositoryAndUserArray.sort(function (a, b) {
