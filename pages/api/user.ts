@@ -8,12 +8,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const body = req.body;
+  const query = req.query;
   const userArray: any[] = [];
 
-  const { error, value } = userSchema.validate(body);
+  const { error, value } = userSchema.validate(query);
   if (error) {
-    res.status(500).send({
+    res.status(400).send({
       errorCode: 400,
       errorMessage: String(error),
     });
