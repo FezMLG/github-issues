@@ -1,7 +1,7 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { envConfig } from "../../envConfig";
-import { SearchRequest } from "../../types";
+import { SearchRequest, UserDetailsRequest } from "../../types";
 import { DataType } from "../../types/DataType.enum";
 import { LOAD_REPOSITORIES } from "./GraphQL/searchRepository";
 import { LOAD_USER } from "./GraphQL/searchUser";
@@ -64,9 +64,9 @@ export const loadUsers = async (body: SearchRequest) => {
   return data;
 };
 
-export const loadUser = async (body: any) => {
+export const loadUser = async (body: UserDetailsRequest) => {
   const variables = {
-    query: body.user,
+    query: body.userNickname,
     type: DataType.USER,
     numOfResults: 1,
   };
