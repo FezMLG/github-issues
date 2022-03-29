@@ -10,6 +10,7 @@ import {
 } from "../types";
 import { ResultRepositoryListElement } from "../components/molecules/ResultRepositoryListElement";
 import { ResultUserListElement } from "../components/molecules/ResultUserListElement";
+import { Box, Container } from "@mui/material";
 
 type ServerSidePropsReturn = {
   data: SearchResponse;
@@ -339,16 +340,25 @@ const Home = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageHeader />
-      {data.result.length === 0 && "No result, sorry"}
-      {data.result.length !== 0 &&
-        data.result.map((el) => {
-          if (isRepository(el)) {
-            return (
-              <ResultRepositoryListElement element={el} key={el.databaseId} />
-            );
-          } else
-            return <ResultUserListElement element={el} key={el.databaseId} />;
-        })}
+      <Container maxWidth={"lg"}>
+        {data.result.length === 0 && "No result, sorry"}
+        {data.result.length !== 0 && (
+          <Box
+            sx={{ marginBottom: "1.5rem", fontWeight: 600, color: "#24292F" }}
+          >
+            Lot of users & repositories
+          </Box>
+        )}
+        {data.result.length &&
+          data.result.map((el) => {
+            if (isRepository(el)) {
+              return (
+                <ResultRepositoryListElement element={el} key={el.databaseId} />
+              );
+            } else
+              return <ResultUserListElement element={el} key={el.databaseId} />;
+          })}
+      </Container>
     </>
   );
 };

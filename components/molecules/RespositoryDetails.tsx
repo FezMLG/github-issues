@@ -9,18 +9,20 @@ type RepositoryDetailsProps = {
 };
 
 export const RepositoryDetails = ({ details }: RepositoryDetailsProps) => {
+  console.group(details);
   const { details: repositoryDetails } = details;
   const areStarsGazers = repositoryDetails.starGazersCount !== 0;
   const areProgrammingLang =
     repositoryDetails.programmingLang[0].color !== null;
+  console.log(areProgrammingLang);
   return (
-    <Stack direction={"row"}>
+    <Stack direction={"row"} spacing={2} sx={{ marginTop: "0.5rem" }}>
       {areStarsGazers && (
         <Stack direction={"row"}>
           <StarBorderIcon /> {repositoryDetails.starGazersCount}
         </Stack>
       )}
-      {areProgrammingLang !== null && (
+      {areProgrammingLang && (
         <Stack direction={"row"} alignItems={"center"}>
           <Box
             sx={{ backgroundColor: repositoryDetails.programmingLang[0].color }}
@@ -28,8 +30,9 @@ export const RepositoryDetails = ({ details }: RepositoryDetailsProps) => {
             height="15px"
             borderRadius={"50%"}
             marginRight={"5px"}
-          ></Box>
-          {repositoryDetails.programmingLang[0].name}
+            display={"block"}
+          />
+          <Box>{repositoryDetails.programmingLang[0].name}</Box>
         </Stack>
       )}
       <Stack direction={"row"} alignItems={"center"}>
