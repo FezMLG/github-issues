@@ -9,12 +9,10 @@ type RepositoryDetailsProps = {
 };
 
 export const RepositoryDetails = ({ details }: RepositoryDetailsProps) => {
-  console.group(details);
   const { details: repositoryDetails } = details;
   const areStarsGazers = repositoryDetails.starGazersCount !== 0;
   const areProgrammingLang =
     repositoryDetails.programmingLang[0].color !== null;
-  console.log(areProgrammingLang);
   return (
     <Stack direction={"row"} spacing={2} sx={{ marginTop: "0.5rem" }}>
       {areStarsGazers && (
