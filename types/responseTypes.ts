@@ -8,6 +8,7 @@ export interface IUserListResult {
   bio: string | null;
   location: string | null;
   databaseId: number;
+  // totalCount: number;
 }
 
 export interface IRepositoryListResult {
@@ -28,6 +29,7 @@ export interface IRepositoryListResult {
     ];
   };
   databaseId: number;
+  // totalCount: number;
 }
 
 export interface IUserDetails {
@@ -41,7 +43,16 @@ export interface IUserDetails {
   };
 }
 
-export type SearchResult = IUserListResult | IRepositoryListResult;
+export interface SearchResult {
+  metadata: {
+    page?: number;
+    perPage?: number;
+    totalCount: number;
+  }
+  items: [
+      IUserListResult | IRepositoryListResult
+  ];
+}
 
 export interface SearchResponse {
   pageNumber: number;
