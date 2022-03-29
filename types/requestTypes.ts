@@ -5,7 +5,7 @@ export interface SearchRequest {
   pageInfo?: {
     startCursor: string;
     endCursor: string;
-  }
+  };
 }
 
 export interface UserDetailsRequest {
