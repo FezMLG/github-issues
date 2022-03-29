@@ -3,7 +3,7 @@ import {
   ErrorResponse,
   IRepositoryListResult,
   IUserListResult,
-  SearchRequest, SearchResponse,
+  SearchResponse,
   SearchResult,
 } from "../../types";
 import { IGithubRepResponse, SearchNode } from "../../types/GithubRepResponse";
@@ -16,18 +16,25 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<SearchResponse | ErrorResponse>
 ) {
-
-  const body: SearchRequest = req.body;
+  const query = req.query;
   const repositoryAndUserArray: SearchResult[] = [];
   let totalCount = 0;
 
-  const { error, value } = searchSchema.validate(body);
+  const { error, value } = searchSchema.validate(query);
   if (error) {
-    res.status(500).send({
+    res.status(400).send({
       errorCode: 400,
       errorMessage: String(error),
     });
   }
+  console.log(typeof value, value, "body", query)
+  if (!value) {
+    res.status(500).send({
+      errorCode: 500,
+      errorMessage: `Validation error ${value}`,
+    });
+  }
+
 
   try {
     const repData: IGithubRepResponse = await loadRepositories(value);
