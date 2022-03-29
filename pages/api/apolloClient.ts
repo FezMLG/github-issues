@@ -1,14 +1,14 @@
-import {ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client";
-import {setContext} from "@apollo/client/link/context";
-import {envConfig} from "../../envConfig";
-import {SearchRequest, UserDetailsRequest} from "../../types";
-import {DataType} from "../../types/DataType.enum";
-import {LOAD_REPOSITORIES} from "./GraphQL/searchRepository";
-import {LOAD_USER} from "./GraphQL/searchUser";
-import {LOAD_USERS} from "./GraphQL/searchUsers";
-import {IGithubRepResponse} from "../../types/GithubRepResponse";
-import {IGithubUsersResponse} from "../../types/GithubUsersResponse";
-import {IGithubUserResponse} from "../../types/GithubUserResponse";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { envConfig } from "../../envConfig";
+import { SearchRequest, UserDetailsRequest } from "../../types";
+import { DataType } from "../../types/DataType.enum";
+import { LOAD_REPOSITORIES } from "./GraphQL/searchRepository";
+import { LOAD_USER } from "./GraphQL/searchUser";
+import { LOAD_USERS } from "./GraphQL/searchUsers";
+import { IGithubRepResponse } from "../../types/GithubRepResponse";
+import { IGithubUsersResponse } from "../../types/GithubUsersResponse";
+import { IGithubUserResponse } from "../../types/GithubUserResponse";
 
 const authLink = setContext((_, {headers}) => {
   const token = envConfig.githubKey;

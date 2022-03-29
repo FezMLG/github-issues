@@ -4,7 +4,6 @@ import {
   IRepositoryListResult,
   IUserListResult,
   SearchRequest,
-  SearchResponse,
   SearchResult,
 } from "../../types";
 import { IGithubRepResponse, SearchNode } from "../../types/GithubRepResponse";
