@@ -10,7 +10,7 @@ import { IGithubRepResponse, SearchNode } from "../../types/GithubRepResponse";
 import { DataType } from "../../types/DataType.enum";
 import { IGithubUsersResponse } from "../../types/GithubUsersResponse";
 import { loadRepositories, loadUsers } from "./apolloClient";
-import { schema } from "./validation";
+import { searchSchema } from "./validation";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +21,7 @@ export default async function handler(
   const repositoryAndUserArray: SearchResult[] = [];
   let totalCount = 0;
 
-  const { error, value } = schema.validate(body);
+  const { error, value } = searchSchema.validate(body);
   if (error) {
     res.status(500).send({
       errorCode: 400,

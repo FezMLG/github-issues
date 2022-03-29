@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { IUserDetails } from "../../types";
 import { IGithubUserResponse } from "../../types/GithubUserResponse";
 import { loadUser } from "./apolloClient";
+import { userSchema } from "./validation";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,8 +11,16 @@ export default async function handler(
   const body = req.body;
   const userArray: any[] = [];
 
+  const { error, value } = userSchema.validate(body);
+  if (error) {
+    res.status(500).send({
+      errorCode: 400,
+      errorMessage: String(error),
+    });
+  }
+
   try {
-    const userData: IGithubUserResponse = await loadUser(body);
+    const userData: IGithubUserResponse = await loadUser(value);
 
     userData.search.nodes.forEach((element: any) => {
       const tempObj: IUserDetails = {
