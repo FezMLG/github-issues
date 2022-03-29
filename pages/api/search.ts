@@ -27,7 +27,6 @@ export default async function handler(
       errorMessage: String(error),
     });
   }
-  console.log(typeof value, value, "body", query)
   if (!value) {
     res.status(500).send({
       errorCode: 500,
