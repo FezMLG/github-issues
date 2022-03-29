@@ -8,7 +8,6 @@ export interface IUserListResult {
   bio: string | null;
   location: string | null;
   databaseId: number;
-  totalCount: number;
 }
 
 export interface IRepositoryListResult {
@@ -29,7 +28,6 @@ export interface IRepositoryListResult {
     ];
   };
   databaseId: number;
-  totalCount: number;
 }
 
 export interface IUserDetails {
@@ -43,14 +41,15 @@ export interface IUserDetails {
   };
 }
 
-export type SearchResult = IUserListResult | IRepositoryListResult
+export type SearchResult = IUserListResult | IRepositoryListResult;
 
 export interface SearchResponse {
   metadata: {
-    page?: number;
-    perPage?: number;
+    perPage: number;
     totalCount: number;
-  }
+    //TODO: pagination
+    pageInfo?: PageInfo;
+  };
   result: SearchResult[];
 }
 
@@ -61,4 +60,11 @@ export interface UserDetailsResponse {
 export interface ErrorResponse {
   errorCode: number;
   errorMessage: string;
+}
+
+export interface PageInfo {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  startCursor: string;
+  endCursor: string;
 }

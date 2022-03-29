@@ -6,6 +6,7 @@ interface Search {
   __typename: string;
   pageInfo: PageInfo;
   nodes: SearchNode[];
+  repositoryCount: number;
 }
 
 export interface SearchNode {
@@ -42,8 +43,10 @@ interface LicenseInfo {
   name: string | null;
 }
 
-interface PageInfo {
+export interface PageInfo {
   __typename: string;
   hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  startCursor: string;
   endCursor: string;
 }

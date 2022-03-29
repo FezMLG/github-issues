@@ -3,24 +3,36 @@ import {
   ErrorResponse,
   IRepositoryListResult,
   IUserListResult,
-  SearchRequest,
+  SearchRequest, SearchResponse,
   SearchResult,
 } from "../../types";
 import { IGithubRepResponse, SearchNode } from "../../types/GithubRepResponse";
 import { DataType } from "../../types/DataType.enum";
 import { IGithubUsersResponse } from "../../types/GithubUsersResponse";
 import { loadRepositories, loadUsers } from "./apolloClient";
+import { schema } from "./validation";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<SearchResult[] | ErrorResponse>
+  res: NextApiResponse<SearchResponse | ErrorResponse>
 ) {
+
   const body: SearchRequest = req.body;
   const repositoryAndUserArray: SearchResult[] = [];
+  let totalCount = 0;
+
+  const { error, value } = schema.validate(body);
+  if (error) {
+    res.status(500).send({
+      errorCode: 400,
+      errorMessage: String(error),
+    });
+  }
 
   try {
-    const repData: IGithubRepResponse = await loadRepositories(body);
+    const repData: IGithubRepResponse = await loadRepositories(value);
     repData.search.nodes.forEach((element: SearchNode) => {
+      totalCount += repData.search.repositoryCount;
       const tempObj: IRepositoryListResult = {
         dataType: DataType.REPOSITORY,
         nameWithOwner: element.nameWithOwner,
@@ -38,7 +50,7 @@ export default async function handler(
             },
           ],
         },
-        databaseId: element.databaseId,
+        databaseId: element.databaseId
       };
       repositoryAndUserArray.push(tempObj);
     });
@@ -50,9 +62,10 @@ export default async function handler(
   }
 
   try {
-    const userData: IGithubUsersResponse = await loadUsers(body);
+    const userData: IGithubUsersResponse = await loadUsers(value);
 
     userData.search.nodes.forEach((element: any) => {
+      totalCount += userData.search.userCount;
       const tempObj: IUserListResult = {
         dataType: DataType.USER,
         avatar: element.avatarUrl,
@@ -60,7 +73,7 @@ export default async function handler(
         nickName: element.login,
         bio: element?.bio || null,
         location: element?.location || null,
-        databaseId: element.databaseId,
+        databaseId: element.databaseId
       };
       repositoryAndUserArray.push(tempObj);
     });
@@ -75,5 +88,11 @@ export default async function handler(
     return a.databaseId - b.databaseId;
   });
 
-  res.status(200).json(repositoryAndUserArray);
+  res.status(200).json({
+    metadata: {
+      perPage: 20,
+      totalCount: totalCount,
+    },
+    result: repositoryAndUserArray,
+  });
 }

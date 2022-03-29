@@ -31,6 +31,13 @@ export const LOAD_REPOSITORIES = gql`
           }
         }
       }
+      repositoryCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
     }
   }
 `;

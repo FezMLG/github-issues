@@ -17,6 +17,13 @@ export const LOAD_USERS = gql`
           databaseId
         }
       }
+      userCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
     }
   }
 `;

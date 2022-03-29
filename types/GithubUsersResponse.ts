@@ -6,6 +6,7 @@ export interface Search {
   __typename: string;
   pageInfo: PageInfo;
   nodes: Node[];
+  userCount: number;
 }
 
 export interface SearchUserNode {
@@ -20,5 +21,7 @@ export interface SearchUserNode {
 export interface PageInfo {
   __typename: string;
   hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  startCursor: string;
   endCursor: string;
 }

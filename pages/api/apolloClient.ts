@@ -10,7 +10,7 @@ import { IGithubRepResponse } from "../../types/GithubRepResponse";
 import { IGithubUsersResponse } from "../../types/GithubUsersResponse";
 import { IGithubUserResponse } from "../../types/GithubUserResponse";
 
-const authLink = setContext((_, {headers}) => {
+const authLink = setContext((_, { headers }) => {
   const token = envConfig.githubKey;
   return {
     headers: {
@@ -33,10 +33,10 @@ export const loadRepositories = async (body: SearchRequest): Promise<IGithubRepR
   const variables = {
     query: body.inputString,
     type: DataType.REPOSITORY,
-    numOfResults: 10,
+    numOfResults: Number(body.perPage) / 2,
   };
-
-  const {data, error} = await client.query({
+  
+  const { data, error } = await client.query({
     query: LOAD_REPOSITORIES,
     variables,
   });
@@ -52,10 +52,10 @@ export const loadUsers = async (body: SearchRequest): Promise<IGithubUsersRespon
   const variables = {
     query: body.inputString,
     type: DataType.USER,
-    numOfResults: 10,
+    numOfResults: Number(body.perPage) / 2,
   };
 
-  const {data, error} = await client.query({
+  const { data, error } = await client.query({
     query: LOAD_USERS,
     variables,
   });
@@ -74,7 +74,7 @@ export const loadUser = async (body: UserDetailsRequest): Promise<IGithubUserRes
     numOfResults: 1,
   };
 
-  const {data, error} = await client.query({
+  const { data, error } = await client.query({
     query: LOAD_USER,
     variables,
   });
