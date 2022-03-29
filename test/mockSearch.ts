@@ -12,11 +12,10 @@ export class MockSearch implements Search {
   async search(request: SearchRequest): Promise<SearchResponse> {
     return {
       metadata: {
-        page: 1,
         perPage: 10,
         totalCount: 234,
       },
-      items: this.generateResultItems(),
+      result: this.generateResultItems(),
     };
   }
 

@@ -34,8 +34,8 @@ const Home = () => {
       </Head>
       <PageHeader />
       <Container maxWidth={"lg"}>
-        {data && data.items.length === 0 && "No result, sorry"}
-        {data && data.items.length !== 0 && (
+        {data && data.result.length === 0 && "No result, sorry"}
+        {data && data.result.length !== 0 && (
           <Box
             sx={{ marginBottom: "1.5rem", fontWeight: 600, color: "#24292F" }}
           >
@@ -43,8 +43,8 @@ const Home = () => {
           </Box>
         )}
         {data &&
-          data.items.length &&
-          data.items.map((el) => {
+          data.result.length &&
+          data.result.map((el) => {
             if (isRepository(el)) {
               return (
                 <ResultRepositoryListElement element={el} key={el.databaseId} />
