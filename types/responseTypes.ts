@@ -51,3 +51,8 @@ export interface SearchResponse {
 export interface UserDetailsResponse {
   result: IUserDetails;
 }
+
+export interface ErrorResponse {
+  errorCode: number;
+  errorMessage: string;
+}
