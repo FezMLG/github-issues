@@ -10,6 +10,12 @@ let theme = createTheme({
       ["300"]: "#6F7781",
       ["900"]: "#24292F",
     },
+    secondary: {
+      light: "rgba(255, 255, 255, 0.5)",
+      contrastText: "white",
+      main: "#6F7781",
+      dark: "#24292F",
+    },
   },
 });
 
